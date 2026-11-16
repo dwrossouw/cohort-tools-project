@@ -52,6 +52,10 @@ app.get("/api/cohorts", (req, res) => {
  res.json(cohorts)
 });
 
+app.use((req, res, next) => {
+res.status(404).sendFile(__dirname + "/views/not-found.html");
+});
+
 
 // START SERVER
 app.listen(PORT, () => {
