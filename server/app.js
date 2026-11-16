@@ -32,6 +32,15 @@ app.get("/docs", (req, res) => {
   res.sendFile(__dirname + "/views/docs.html");
 });
 
+app.get("/students", (req, res) => {
+ res.json(students)
+});
+
+
+app.get("/cohorts", (req, res) => {
+ res.json(cohorts)
+});
+
 
 // START SERVER
 app.listen(PORT, () => {
