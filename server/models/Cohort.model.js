@@ -34,7 +34,7 @@ const cohortSchema = new Schema({
 
   startDate: { type: Date, default: Date.now },
 
-  endDate: Date,
+  endDate: {type: Date},
 
   inProgress: { type: Boolean, default: false },
 
