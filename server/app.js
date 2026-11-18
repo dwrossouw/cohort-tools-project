@@ -51,13 +51,6 @@ app.get("/docs", (req, res) => {
   res.sendFile(__dirname + "/views/docs.html");
 });
 
-// app.get("/api/students", (req, res) => {
-//  res.json(students)
-// });
-
-// app.get("/api/cohorts", (req, res) => {
-//  res.json(cohorts)
-// });
 
 // Get request using then/catch
 // app.get("/students", (req, res) => {
@@ -91,13 +84,6 @@ app.get("/cohorts", async (req, res, next) => {
   try {
     // Retrieve all cohort documents from MongoDB
     const cohorts = await Cohort.find();
-
-    //Do we need this?
-    // if (cohorts.length === 0) {
-    //   return res.status(404).json({
-    //     message: "Cohorts not found"
-    //   });
-    // }
 
     // Send the cohorts to the client as JSON
     res.json(cohorts);
