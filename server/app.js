@@ -153,3 +153,83 @@ Cohort.findByIdAndDelete(req.params.id)
   res.status(500).json({message:"Error deleting cohort by id"})
 })
 })
+
+//Student routes
+//Create a new student
+app.post("/api/students", async(req, res)=>{
+  const newStudent = {
+    firstName : req.body.firstName;
+    lastName : req.body.lastName;
+    email : req.body.email;
+    phone: req.body.phone;
+    linkedInUrl: req.body.linkedInUrl;
+    languages: req.body.languages;
+    program: req.body.program;
+    background: req.body.background;
+    image: req.body.image;
+    cohort: req.body.cohort;
+    projects: req.body.projects;
+  }
+
+  try {
+    const student = await Student.create(newStudent);
+    res.status(201).json(student);
+  }
+  catch (error){
+    res.status(500).json({message: "Error while creating new student."})
+  }
+})
+
+//Retrieve all of the students for a given cohort
+app.get("api/students/:cohortId", async (req, res)=>{
+
+}) 
+
+//Retrieves a specific student by id
+app.get("api/student/:studentId", async (req, res)=>{
+  try {
+    const student = await Student.findById(req.params.id);
+
+    if(!student){
+      res.status(404).json({message: "No student was found with that ID"})
+    }
+    else {
+      res.status(200).json(student);
+    }
+  } catch (error) {
+    res.status(500).json({message: "Error while retrieving student data."})
+  }
+})
+
+//Update a specific student by ID
+app.put("/api/students/:studentId", async (req, res)=> {
+  try {
+    const student = await Student.findByIdAndUpdate (req.params.id, req.body, {new: true, runValidators: true});
+
+    if(!student){
+      res.status(404).json({message: "No student was found with that ID"})
+    }
+    else {
+      res.status(200).json(student);
+    }
+
+  } catch (error) {
+     res.status(500).json({message: "Error while retrieving student data."})
+  }
+})
+
+//Delete a specific student by ID
+app.delete("/api/students/:studentId", asyn (req,res)=>{
+  try {
+    const student = await Student.findByIdAndDelete(req.params.id);
+
+      if(!student){
+      res.status(404).json({message: "No student was found with that ID"})
+    }
+    else {
+      res.sendStatus(204);
+    }
+  } catch (error) {
+    res.status(500).json({message: "Error while deleting student data."})
+  }
+})
