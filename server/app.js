@@ -225,6 +225,7 @@ app.post("/api/students", async(req, res)=>{
 
 //Retrieve all of the students for a given cohort
 app.get("api/students/:cohortId", async (req, res)=>{
+  
 
 }) 
 
