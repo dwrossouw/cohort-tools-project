@@ -103,17 +103,38 @@ app.get("/api/students/cohort/:cohortId", async (req, res, next) => {
 });
 
 //Retrieves a specific student by id
+// app.get("/api/student/:studentId", async (req, res) => {
+//   try {
+//     const student = await Student.findById(req.params.id);
+
+//     if (!student) {
+//       res.status(404).json({ message: "No student was found with that ID" });
+//     } else {
+//       res.status(200).json(student);
+//     }
+//   } catch (error) {
+//     res.status(500).json({ message: "Error while retrieving student data." });
+//   }
+// });
+
 app.get("/api/student/:studentId", async (req, res) => {
+  const { studentId } = req.params;
+
+  if (!mongoose.isObjectIdOrHexString(studentId)) {
+    return res.status(400).json({ error: "Invalid student ID" });
+  }
+
   try {
-    const student = await Student.findById(req.params.id);
+    const student = await Student.findById(studentId).populate("cohort");
 
     if (!student) {
-      res.status(404).json({ message: "No student was found with that ID" });
-    } else {
-      res.status(200).json(student);
+      return res.status(404).json({ error: "Student not found" });
     }
+
+    res.status(200).json(student);
   } catch (error) {
-    res.status(500).json({ message: "Error while retrieving student data." });
+    console.error("Error while retrieving student:", error);
+    res.status(500).json({ error: "Failed to retrieve student" });
   }
 });
 
