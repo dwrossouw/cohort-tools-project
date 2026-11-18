@@ -79,8 +79,41 @@ app.get("/students", async (req, res, next) => {
   }
 });
 
+
+
+app.use((req, res, next) => {
+  res.status(404).sendFile(__dirname + "/views/not-found.html");
+});
+
+// START SERVER
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});
+
+app.post("/api/cohorts" , (req,res)=>{
+Cohort.create({
+  cohortSlug: req.body.cohortSlug,
+  cohortName: req.body.cohortName,
+  program:req.body.program,
+  format:req.body.format,
+  campus:req.body.campus,
+  startDate:req.body.startDate,
+  endDate:req.body.endDate,
+  inProgress:req.body.inProgress,
+  programManager:req.body.programManager,
+  leadTeacher:req.body.leadTeacher,
+  totalHours:req.body.totalHours,
+})
+.then((createdCohort)=>{
+  res.status(201).json(createdCohort)
+})
+.catch((err)=>{
+  res.status(500).json({message:"Error getting all cohort"})
+})
+})
+
 // GET all cohorts
-app.get("/cohorts", async (req, res, next) => {
+app.get("/api/cohorts", async (req, res, next) => {
   try {
     // Retrieve all cohort documents from MongoDB
     const cohorts = await Cohort.find();
@@ -92,110 +125,34 @@ app.get("/cohorts", async (req, res, next) => {
     next(error);
   }
 });
-
-app.use((req, res, next) => {
-  res.status(404).sendFile(__dirname + "/views/not-found.html");
+ app.get("/api/cohorts/:cohortId", (req, res) => {
+  Cohort.findById(req.params.id)
+    .then((cohort) => {
+     
+  res.status(201).json(cohort)
+    })
+    .catch((err)=>{
+  res.status(500).json({message:"Error getting cohort by id"})
+})
 });
-
-// START SERVER
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+app.put("/api/cohorts/:cohortId" ,(req,res)=>{
+Cohort.findByIdAndUpdate(req.params.id,req.body,{new:true})
+.then((updatedCohort)=>{
+  res.status(201).json(updatedCohort)
+})
+ .catch((err)=>{
+  res.status(500).json({message:"Error updating cohort by id"})
+})
+})
+app.delete("/api/cohorts/:cohortId" ,(req,res)=>{
+Cohort.findByIdAndDelete(req.params.id)
+.then((deleteCohort)=>{
+  res.status(201).json(deleteCohort)
+})
+ .catch((err)=>{
+  res.status(500).json({message:"Error deleting cohort by id"})
+})
+})
 
 //Student routes
 //Create a new student
