@@ -96,11 +96,7 @@ app.get("/api/students/cohort/:cohortId", async (req, res, next) => {
   try {
     const students = await Student.find({ cohort: req.params.cohortId });
 
-    if (!students) {
-      res.status(404).json({ message: "No student was found with that ID" });
-    } else {
-      res.json(students);
-    }
+    res.json(students);
   } catch (error) {
     next(error);
   }
