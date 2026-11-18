@@ -117,6 +117,7 @@ app.get("/api/students/cohort/:cohortId", async (req, res, next) => {
 //   }
 // });
 
+//Retrieves a specific student by id with populate
 app.get("/api/student/:studentId", async (req, res) => {
   const { studentId } = req.params;
 
