@@ -51,22 +51,10 @@ app.get("/docs", (req, res) => {
   res.sendFile(__dirname + "/views/docs.html");
 });
 
-
-// Get request using then/catch
-// app.get("/students", (req, res) => {
-//   Student.find({})
-//     .then((Student) => {
-//       console.log("Retrieved students ->", Student);
-//       res.json(Student);
-//     })
-//     .catch((error) => {
-//       console.error("Error while retrieving students ->", error);
-//       res.status(500).json({ error: "Failed to retrieve students" });
-//     });
-// });
+//All student routes
 
 // GET all students
-app.get("/students", async (req, res, next) => {
+app.get("/api/students", async (req, res, next) => {
   try {
     // Retrieve all student documents from MongoDB
     const students = await Student.find();
@@ -79,38 +67,86 @@ app.get("/students", async (req, res, next) => {
   }
 });
 
+//Create a new student
+app.post("/api/students", async (req, res) => {
+  const newStudent = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    phone: req.body.phone,
+    linkedInUrl: req.body.linkedInUrl,
+    languages: req.body.languages,
+    program: req.body.program,
+    background: req.body.background,
+    image: req.body.image,
+    cohort: req.body.cohort,
+    projects: req.body.projects,
+  };
 
-
-app.use((req, res, next) => {
-  res.status(404).sendFile(__dirname + "/views/not-found.html");
+  try {
+    const student = await Student.create(newStudent);
+    res.status(201).json(student);
+  } catch (error) {
+    res.status(500).json({ message: "Error while creating new student." });
+  }
 });
 
-// START SERVER
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+//Retrieve all of the students for a given cohort
+app.get("api/students/:cohortId", async (req, res) => {
+  console.log("Resolving a merge conflict");
+  console.log("Life is not beautiful");
+  console.log("Help me");
 });
 
-app.post("/api/cohorts" , (req,res)=>{
-Cohort.create({
-  cohortSlug: req.body.cohortSlug,
-  cohortName: req.body.cohortName,
-  program:req.body.program,
-  format:req.body.format,
-  campus:req.body.campus,
-  startDate:req.body.startDate,
-  endDate:req.body.endDate,
-  inProgress:req.body.inProgress,
-  programManager:req.body.programManager,
-  leadTeacher:req.body.leadTeacher,
-  totalHours:req.body.totalHours,
-})
-.then((createdCohort)=>{
-  res.status(201).json(createdCohort)
-})
-.catch((err)=>{
-  res.status(500).json({message:"Error getting all cohort"})
-})
-})
+//Retrieves a specific student by id
+app.get("api/student/:studentId", async (req, res) => {
+  try {
+    const student = await Student.findById(req.params.id);
+
+    if (!student) {
+      res.status(404).json({ message: "No student was found with that ID" });
+    } else {
+      res.status(200).json(student);
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error while retrieving student data." });
+  }
+});
+
+//Update a specific student by ID
+app.put("/api/students/:studentId", async (req, res) => {
+  try {
+    const student = await Student.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!student) {
+      res.status(404).json({ message: "No student was found with that ID" });
+    } else {
+      res.status(200).json(student);
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error while retrieving student data." });
+  }
+});
+
+//Delete a specific student by ID
+app.delete("/api/students/:studentId", async (req, res) => {
+  try {
+    const student = await Student.findByIdAndDelete(req.params.id);
+
+    if (!student) {
+      res.status(404).json({ message: "No student was found with that ID" });
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error while deleting student data." });
+  }
+});
+
+//All cohort routes
 
 // GET all cohorts
 app.get("/api/cohorts", async (req, res, next) => {
@@ -125,115 +161,67 @@ app.get("/api/cohorts", async (req, res, next) => {
     next(error);
   }
 });
- app.get("/api/cohorts/:cohortId", (req, res) => {
+app.get("/api/cohorts/:cohortId", (req, res) => {
   Cohort.findById(req.params.id)
     .then((cohort) => {
-     
-  res.status(201).json(cohort)
+      res.status(201).json(cohort);
     })
-    .catch((err)=>{
-  res.status(500).json({message:"Error getting cohort by id"})
-})
+    .catch((err) => {
+      res.status(500).json({ message: "Error getting cohort by id" });
+    });
 });
 
-app.put("/api/cohorts/:cohortId" ,(req,res)=>{
-Cohort.findByIdAndUpdate(req.params.id,req.body,{new:true})
-.then((updatedCohort)=>{
-  res.status(201).json(updatedCohort)
-})
- .catch((err)=>{
-  res.status(500).json({message:"Error updating cohort by id"})
-})
-})
-
-app.delete("/api/cohorts/:cohortId" ,(req,res)=>{
-Cohort.findByIdAndDelete(req.params.id)
-.then((deleteCohort)=>{
-  res.status(201).json(deleteCohort)
-})
- .catch((err)=>{
-  res.status(500).json({message:"Error deleting cohort by id"})
-})
-})
-
-//Student routes
-//Create a new student
-app.post("/api/students", async(req, res)=>{
-  const newStudent = {
-    firstName : req.body.firstName,
-    lastName : req.body.lastName,
-    email : req.body.email,
-    phone: req.body.phone,
-    linkedInUrl: req.body.linkedInUrl,
-    languages: req.body.languages,
+//Create a new cohort
+app.post("/api/cohorts", (req, res) => {
+  Cohort.create({
+    cohortSlug: req.body.cohortSlug,
+    cohortName: req.body.cohortName,
     program: req.body.program,
-    background: req.body.background,
-    image: req.body.image,
-    cohort: req.body.cohort,
-    projects: req.body.projects,
-  }
+    format: req.body.format,
+    campus: req.body.campus,
+    startDate: req.body.startDate,
+    endDate: req.body.endDate,
+    inProgress: req.body.inProgress,
+    programManager: req.body.programManager,
+    leadTeacher: req.body.leadTeacher,
+    totalHours: req.body.totalHours,
+  })
+    .then((createdCohort) => {
+      res.status(201).json(createdCohort);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: "Error getting all cohort" });
+    });
+});
 
-  try {
-    const student = await Student.create(newStudent);
-    res.status(201).json(student);
-  }
-  catch (error){
-    res.status(500).json({message: "Error while creating new student."})
-  }
-})
+//Update cohort by ID
+app.put("/api/cohorts/:cohortId", (req, res) => {
+  Cohort.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .then((updatedCohort) => {
+      res.status(201).json(updatedCohort);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: "Error updating cohort by id" });
+    });
+});
 
-//Retrieve all of the students for a given cohort
-app.get("api/students/:cohortId", async (req, res)=>{
-console.log("Resolving a merge conflict");
-console.log("Life is not beautiful");
-console.log("Help me");
-}) 
+//Delete a chort by ID
+app.delete("/api/cohorts/:cohortId", (req, res) => {
+  Cohort.findByIdAndDelete(req.params.id)
+    .then((deleteCohort) => {
+      res.status(201).json(deleteCohort);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: "Error deleting cohort by id" });
+    });
+});
 
-//Retrieves a specific student by id
-app.get("api/student/:studentId", async (req, res)=>{
-  try {
-    const student = await Student.findById(req.params.id);
+//Page not found
+app.use((req, res, next) => {
+  res.status(404).sendFile(__dirname + "/views/not-found.html");
+});
 
-    if(!student){
-      res.status(404).json({message: "No student was found with that ID"})
-    }
-    else {
-      res.status(200).json(student);
-    }
-  } catch (error) {
-    res.status(500).json({message: "Error while retrieving student data."})
-  }
-})
-
-//Update a specific student by ID
-app.put("/api/students/:studentId", async (req, res)=> {
-  try {
-    const student = await Student.findByIdAndUpdate (req.params.id, req.body, {new: true, runValidators: true});
-
-    if(!student){
-      res.status(404).json({message: "No student was found with that ID"})
-    }
-    else {
-      res.status(200).json(student);
-    }
-
-  } catch (error) {
-     res.status(500).json({message: "Error while retrieving student data."})
-  }
-})
-
-//Delete a specific student by ID
-app.delete("/api/students/:studentId", async (req,res)=>{
-  try {
-    const student = await Student.findByIdAndDelete(req.params.id);
-
-      if(!student){
-      res.status(404).json({message: "No student was found with that ID"})
-    }
-    else {
-      res.sendStatus(204);
-    }
-  } catch (error) {
-    res.status(500).json({message: "Error while deleting student data."})
-  }
-})
+// START SERVER
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});
