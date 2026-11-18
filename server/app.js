@@ -92,10 +92,18 @@ app.post("/api/students", async (req, res) => {
 });
 
 //Retrieve all of the students for a given cohort
-app.get("api/students/:cohortId", async (req, res) => {
-  console.log("Resolving a merge conflict");
-  console.log("Life is not beautiful");
-  console.log("Help me");
+app.get("api/students/cohort/:cohortId", async (req, res, next) => {
+  try {
+    const students = await Student.find({ cohort: req.params.cohortId });
+
+    if (!students) {
+      res.status(404).json({ message: "No student was found with that ID" });
+    } else {
+      res.json(students);
+    }
+  } catch (error) {
+    next(error);
+  }
 });
 
 //Retrieves a specific student by id
