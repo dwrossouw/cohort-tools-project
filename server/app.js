@@ -135,6 +135,7 @@ app.get("/api/cohorts", async (req, res, next) => {
   res.status(500).json({message:"Error getting cohort by id"})
 })
 });
+
 app.put("/api/cohorts/:cohortId" ,(req,res)=>{
 Cohort.findByIdAndUpdate(req.params.id,req.body,{new:true})
 .then((updatedCohort)=>{
@@ -144,6 +145,7 @@ Cohort.findByIdAndUpdate(req.params.id,req.body,{new:true})
   res.status(500).json({message:"Error updating cohort by id"})
 })
 })
+
 app.delete("/api/cohorts/:cohortId" ,(req,res)=>{
 Cohort.findByIdAndDelete(req.params.id)
 .then((deleteCohort)=>{
@@ -182,7 +184,7 @@ app.post("/api/students", async(req, res)=>{
 
 //Retrieve all of the students for a given cohort
 app.get("api/students/:cohortId", async (req, res)=>{
-console.log("Reserving a merge conflict");
+console.log("Resolving a merge conflict");
 console.log("Life is not beautiful");
 console.log("Help me");
 }) 
@@ -223,7 +225,7 @@ app.put("/api/students/:studentId", async (req, res)=> {
 //Delete a specific student by ID
 app.delete("/api/students/:studentId", async (req,res)=>{
   try {
-    const student = await Student.findByIdAndDelete(req.params.id),
+    const student = await Student.findByIdAndDelete(req.params.id);
 
       if(!student){
       res.status(404).json({message: "No student was found with that ID"})
