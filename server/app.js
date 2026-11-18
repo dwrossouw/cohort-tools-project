@@ -141,7 +141,7 @@ app.get("/api/student/:studentId", async (req, res) => {
 //Update a specific student by ID
 app.put("/api/students/:studentId", async (req, res) => {
   try {
-    const student = await Student.findByIdAndUpdate(req.params.id, req.body, {
+    const student = await Student.findByIdAndUpdate(req.params.studentId, req.body, {
       new: true,
       runValidators: true,
     });
@@ -159,7 +159,7 @@ app.put("/api/students/:studentId", async (req, res) => {
 //Delete a specific student by ID
 app.delete("/api/students/:studentId", async (req, res) => {
   try {
-    const student = await Student.findByIdAndDelete(req.params.id);
+    const student = await Student.findByIdAndDelete(req.params.studentId);
 
     if (!student) {
       res.status(404).json({ message: "No student was found with that ID" });
