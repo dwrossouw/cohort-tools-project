@@ -158,17 +158,17 @@ Cohort.findByIdAndDelete(req.params.id)
 //Create a new student
 app.post("/api/students", async(req, res)=>{
   const newStudent = {
-    firstName : req.body.firstName;
-    lastName : req.body.lastName;
-    email : req.body.email;
-    phone: req.body.phone;
-    linkedInUrl: req.body.linkedInUrl;
-    languages: req.body.languages;
-    program: req.body.program;
-    background: req.body.background;
-    image: req.body.image;
-    cohort: req.body.cohort;
-    projects: req.body.projects;
+    firstName : req.body.firstName,
+    lastName : req.body.lastName,
+    email : req.body.email,
+    phone: req.body.phone,
+    linkedInUrl: req.body.linkedInUrl,
+    languages: req.body.languages,
+    program: req.body.program,
+    background: req.body.background,
+    image: req.body.image,
+    cohort: req.body.cohort,
+    projects: req.body.projects,
   }
 
   try {
@@ -219,9 +219,9 @@ app.put("/api/students/:studentId", async (req, res)=> {
 })
 
 //Delete a specific student by ID
-app.delete("/api/students/:studentId", asyn (req,res)=>{
+app.delete("/api/students/:studentId", async (req,res)=>{
   try {
-    const student = await Student.findByIdAndDelete(req.params.id);
+    const student = await Student.findByIdAndDelete(req.params.id),
 
       if(!student){
       res.status(404).json({message: "No student was found with that ID"})
