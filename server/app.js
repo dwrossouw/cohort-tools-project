@@ -92,7 +92,7 @@ app.post("/api/students", async (req, res) => {
 });
 
 //Retrieve all of the students for a given cohort
-app.get("api/students/cohort/:cohortId", async (req, res, next) => {
+app.get("/api/students/cohort/:cohortId", async (req, res, next) => {
   try {
     const students = await Student.find({ cohort: req.params.cohortId });
 
@@ -107,7 +107,7 @@ app.get("api/students/cohort/:cohortId", async (req, res, next) => {
 });
 
 //Retrieves a specific student by id
-app.get("api/student/:studentId", async (req, res) => {
+app.get("/api/student/:studentId", async (req, res) => {
   try {
     const student = await Student.findById(req.params.id);
 
