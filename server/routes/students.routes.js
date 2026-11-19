@@ -36,6 +36,35 @@ router.get("/student/:studentId", async (req, res) => {
     res.status(200).json(student);
   
 });
+router.get("/students/cohort/:cohortId", async (req, res, next) => {
+  
+    const students = await Student.find({ cohort: req.params.cohortId });
+
+    res.json(students);
+  
+});
+
+//Create a new student
+router.post("/students", async (req, res) => {
+  const newStudent = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    phone: req.body.phone,
+    linkedInUrl: req.body.linkedInUrl,
+    languages: req.body.languages,
+    program: req.body.program,
+    background: req.body.background,
+    image: req.body.image,
+    cohort: req.body.cohort,
+    projects: req.body.projects,
+  };
+
+ 
+    const student = await Student.create(newStudent);
+    res.status(201).json(student);
+  
+});
 
 //Update a specific student by ID
 router.put("/students/:studentId", async (req, res) => {
