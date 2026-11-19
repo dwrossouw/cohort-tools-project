@@ -3,7 +3,7 @@ const router = Router();
 
 const Cohort = require("../models/Cohort.model");
 
-router.get("/api/cohorts", async (req, res, next) => {
+router.get("/cohorts", async (req, res, next) => {
   try {
     // Retrieve all cohort documents from MongoDB
     const cohorts = await Cohort.find();
@@ -15,7 +15,7 @@ router.get("/api/cohorts", async (req, res, next) => {
     next(error);
   }
 });
-router.get("/api/cohorts/:cohortId", (req, res) => {
+router.get("/cohorts/:cohortId", (req, res) => {
   Cohort.findById(req.params.cohortId)
     .then((cohort) => {
       res.status(201).json(cohort);
@@ -26,7 +26,7 @@ router.get("/api/cohorts/:cohortId", (req, res) => {
 });
 
 //Create a new cohort
-router.post("/api/cohorts", (req, res) => {
+router.post("/cohorts", (req, res) => {
   Cohort.create({
     cohortSlug: req.body.cohortSlug,
     cohortName: req.body.cohortName,
@@ -49,7 +49,7 @@ router.post("/api/cohorts", (req, res) => {
 });
 
 //Update cohort by ID
-router.put("/api/cohorts/:cohortId", (req, res) => {
+router.put("/cohorts/:cohortId", (req, res) => {
   Cohort.findByIdAndUpdate(req.params.cohortId, req.body, { new: true })
     .then((updatedCohort) => {
       res.status(200).json(updatedCohort);
@@ -60,7 +60,7 @@ router.put("/api/cohorts/:cohortId", (req, res) => {
 });
 
 //Delete a chort by ID
-router.delete("/api/cohorts/:cohortId", (req, res) => {
+router.delete("/cohorts/:cohortId", (req, res) => {
   Cohort.findByIdAndDelete(req.params.cohortId)
     .then((deleteCohort) => {
       res.status(201).json(deleteCohort);

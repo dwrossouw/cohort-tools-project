@@ -15,6 +15,10 @@ addConfig(app)
 const indexRouter = require("./routes/index.routes.js")
 app.use(indexRouter)
 
+const handleErrors = require("./errors")
+handleErrors(app)
+
+
 
 app.get("/docs", (req, res) => {
   res.sendFile(__dirname + "/views/docs.html");
