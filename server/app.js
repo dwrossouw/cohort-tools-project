@@ -188,7 +188,7 @@ app.get("/api/cohorts", async (req, res, next) => {
   }
 });
 app.get("/api/cohorts/:cohortId", (req, res) => {
-  Cohort.findById(req.params.id)
+  Cohort.findById(req.params.cohortId)
     .then((cohort) => {
       res.status(201).json(cohort);
     })
@@ -216,15 +216,15 @@ app.post("/api/cohorts", (req, res) => {
       res.status(201).json(createdCohort);
     })
     .catch((err) => {
-      res.status(500).json({ message: "Error getting all cohort" });
+      res.status(500).json({ message: "Error posting all cohort" });
     });
 });
 
 //Update cohort by ID
 app.put("/api/cohorts/:cohortId", (req, res) => {
-  Cohort.findByIdAndUpdate(req.params.id, req.body, { new: true })
+  Cohort.findByIdAndUpdate(req.params.cohortId, req.body, { new: true })
     .then((updatedCohort) => {
-      res.status(201).json(updatedCohort);
+      res.status(200).json(updatedCohort);
     })
     .catch((err) => {
       res.status(500).json({ message: "Error updating cohort by id" });
@@ -233,7 +233,7 @@ app.put("/api/cohorts/:cohortId", (req, res) => {
 
 //Delete a chort by ID
 app.delete("/api/cohorts/:cohortId", (req, res) => {
-  Cohort.findByIdAndDelete(req.params.id)
+  Cohort.findByIdAndDelete(req.params.cohortId)
     .then((deleteCohort) => {
       res.status(201).json(deleteCohort);
     })
