@@ -1,29 +1,30 @@
+try {
+  process.loadEnvFile();
+} catch (error) {
+  console.warn(".env file not found, using default environment values");
+}
+
 const express = require("express");
 const PORT = 5006;
 
 // app.js
-require("./db")
-
+require("./db");
 
 // INITIALIZE EXPRESS APP - https://expressjs.com/en/4x/api.html#express
 const app = express();
 
-const addConfig = require("./config")
-addConfig(app)
+const addConfig = require("./config");
+addConfig(app);
 
+const indexRouter = require("./routes/index.routes.js");
+app.use(indexRouter);
 
-const indexRouter = require("./routes/index.routes.js")
-app.use(indexRouter)
-
-const handleErrors = require("./errors")
-handleErrors(app)
-
-
+const handleErrors = require("./errors");
+handleErrors(app);
 
 app.get("/docs", (req, res) => {
   res.sendFile(__dirname + "/views/docs.html");
 });
-
 
 //Page not found
 app.use((req, res, next) => {
