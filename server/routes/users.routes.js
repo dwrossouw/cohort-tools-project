@@ -3,7 +3,7 @@ const router = require("express").Router();
 const { verifyToken } = require("../middlewares/auth.middlewares")
 
 
-router.get("/user", verifyToken, (req, res) => {
+router.get("/user/:id", verifyToken, (req, res) => {
   console.log(req.payload) 
 
   res.send("accesing route only for logged in users")
