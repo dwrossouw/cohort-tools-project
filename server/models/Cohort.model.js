@@ -1,7 +1,5 @@
-
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
 
 const cohortSchema = new Schema({
   cohortSlug: { type: String, required: true, unique: true },
@@ -44,7 +42,6 @@ const cohortSchema = new Schema({
 
   totalHours: { type: Number, default: 360 }
 });
-
 
 const Cohort = mongoose.model("Cohort", cohortSchema);
  
