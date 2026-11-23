@@ -6,7 +6,7 @@ const { verifyToken } = require("../middlewares/auth.middlewares")
 
 // Retrieve a user route for an authenticated user.
 // verifyToken runs before the route handler and validates the bearer token.
-router.get("/user/:id", verifyToken, (req, res) => {
+router.get("/users/:id", verifyToken, (req, res) => {
   // Log the decoded token payload for debugging and user identification.
   console.log(req.payload) 
 
