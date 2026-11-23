@@ -19,7 +19,7 @@ router.get("/students", async (req, res) => {
 });
 
 // Retrieve one student by ID and include its associated cohort data.
-router.get("/student/:studentId", async (req, res) => {
+router.get("/students/:studentId", async (req, res) => {
   const studentId = req.params.studentId;
 
   const student = await Student.findById(studentId).populate("cohort");
