@@ -27,6 +27,7 @@ function UserProfilePage() {
           )
           .then((response) => {
             setUserProfile(response.data);
+            console.log("user data", response.data)
             setLoading(false);
           })
           .catch((error) => {

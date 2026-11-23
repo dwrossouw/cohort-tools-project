@@ -14,8 +14,8 @@ const User = require("../models/User.model");
 // Register a new user.
 router.post("/signup", async (req, res) => {
   // Log the incoming request body while debugging.
-  console.log(req.body);
-  const { email, password, username } = req.body;
+  console.log("User data:",req.body);
+  const { email, password, name } = req.body;
 
   // Both email and password are mandatory for account creation.
   if (!email || !password) {
@@ -59,12 +59,13 @@ router.post("/signup", async (req, res) => {
   const newUser = {
     email: email,
     password: passwordHash,
-    username: username,
+    username: name,
   };
 
   // Save the user and report successful account creation.
   await User.create(newUser);
   res.status(201).json({ message: "User created" });
+
 });
 
 // Authenticate an existing user and issue a login token.
@@ -100,6 +101,7 @@ router.post("/login", async (req, res) => {
     _id: foundUser._id,
     email: foundUser.email,
     role: foundUser.role,
+    username: foundUser.username
   };
 
   // Sign a token that expires after seven days.

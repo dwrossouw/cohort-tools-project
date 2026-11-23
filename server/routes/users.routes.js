@@ -11,7 +11,9 @@ router.get("/users/:id", verifyToken, (req, res) => {
   console.log(req.payload) 
 
   // Confirm that the request reached a route protected by authentication.
-  res.send("accesing route only for logged in users")
+  //res.send("accesing route only for logged in users")
+  res.status(200).json(req.payload);
+ // console.log(res.send);
 })
 
 // Export the router so it can be mounted by the application.
